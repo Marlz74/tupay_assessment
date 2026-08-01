@@ -1,0 +1,120 @@
+### Tupay Ledger & Settlement — manual API walkthrough
+### Requires: `php artisan serve`, migrated + seeded DB, Redis, WEBHOOK_SECRET set.
+### REST Client: run Login → TOTP → Wallets → set wallet vars → Challenge → Swap → Sign → Settlement.
+
+@baseUrl = http://127.0.0.1:8000
+@token =
+@totp =
+@eat =
+@sourceWalletId =
+@destinationWalletId =
+@walletId =
+@swapAmount = 10000
+@settlementAmount = 50000
+@providerReference = set_demo_001
+@signature =
+
+### Login
+# @name login
+POST {{baseUrl}}/api/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "test@tupay.test",
+  "password": "password"
+}
+
+###
+@token = {{login.response.body.data.token}}
+
+### Current TOTP (local / testing only)
+# @name totpDev
+GET {{baseUrl}}/api/dev/totp/current
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+@totp = {{totpDev.response.body.data.totp}}
+
+### List wallets (copy NGN id → sourceWalletId / walletId, CNY id → destinationWalletId)
+# @name wallets
+GET {{baseUrl}}/api/wallets
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+# After wallets response, set manually if auto-pick is unavailable:
+# @sourceWalletId = <ngn-wallet-uuid>
+# @destinationWalletId = <cny-wallet-uuid>
+# @walletId = <ngn-wallet-uuid>
+
+### 2FA challenge → elevated action token (60s TTL, single-use)
+# @name challenge
+POST {{baseUrl}}/api/2fa/challenge
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "totp": "{{totp}}",
+  "action": "swap",
+  "action_payload": {
+    "source_wallet_id": "{{sourceWalletId}}",
+    "destination_wallet_id": "{{destinationWalletId}}",
+    "amount": {{swapAmount}}
+  }
+}
+
+###
+@eat = {{challenge.response.body.data.elevated_action_token}}
+
+### Swap (body must match action_payload; EAT header required)
+# @name swap
+POST {{baseUrl}}/api/swap
+Authorization: Bearer {{token}}
+X-Elevated-Action-Token: {{eat}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "source_wallet_id": "{{sourceWalletId}}",
+  "destination_wallet_id": "{{destinationWalletId}}",
+  "amount": {{swapAmount}}
+}
+
+### Ledger for source wallet
+GET {{baseUrl}}/api/ledger/{{sourceWalletId}}?per_page=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Sign settlement webhook body (local / testing only) — use the EXACT same JSON for settlement
+# @name sign
+POST {{baseUrl}}/api/dev/webhooks/sign
+Content-Type: application/json
+Accept: application/json
+
+{
+  "provider_reference": "{{providerReference}}",
+  "status": "completed",
+  "wallet_id": "{{walletId}}",
+  "amount": {{settlementAmount}},
+  "currency_code": "NGN"
+}
+
+###
+@signature = {{sign.response.body.data.signature}}
+
+### Settlement webhook (HMAC over raw body bytes)
+POST {{baseUrl}}/api/webhooks/settlement
+Content-Type: application/json
+Accept: application/json
+X-Signature: {{signature}}
+
+{
+  "provider_reference": "{{providerReference}}",
+  "status": "completed",
+  "wallet_id": "{{walletId}}",
+  "amount": {{settlementAmount}},
+  "currency_code": "NGN"
+}

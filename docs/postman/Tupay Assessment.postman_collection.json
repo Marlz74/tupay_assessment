@@ -1,0 +1,979 @@
+{
+  "info": {
+    "_postman_id": "777382f8-3552-48ab-86a1-06d29d8ef5a7",
+    "name": "Tupay Assessment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28547530",
+    "_collection_link": "https://go.postman.co/collection/28547530-777382f8-3552-48ab-86a1-06d29d8ef5a7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\":\"{{email}}\",\n    \"password\":\"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\":\"test@tupay.test\",\n    \"password\":\"password\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 31 Jul 2026 23:27:29 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "5"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "4"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Authenticated\",\n    \"data\": {\n        \"token\": \"1|p35JZzfUxKuwoG3EbHVDeVU9FabrWEfHwfqB4uFOa1e1ce30\",\n        \"token_type\": \"Bearer\",\n        \"user\": {\n            \"id\": \"019fba7d-5c1c-71a6-9332-0f836f572750\",\n            \"firstname\": \"Test\",\n            \"lastname\": \"User\",\n            \"email\": \"test@tupay.test\"\n        }\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2FA",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"totp\":\"{{totp}}\",\n    \"action\":\"swap\",\n    \"action_payload\":{\n        \"source_wallet_id\":\"{{source_wallet_id}}\",\n        \"destination_wallet_id\":\"{{destination_wallet_id}}\",\n        \"amount\":{{swap_amount}}\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/2fa/challenge",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "2fa",
+                "challenge"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"totp\":\"940742\",\n    \"action\":\"swap\",\n    \"action_payload\":{\n        \"source_wallet_id\":\"019fbd24-c57c-72e7-a9e1-572697fbc9ff\",\n        \"destination_wallet_id\":\"019fb9f8-5d76-7367-8cfe-1047269a7340\",\n        \"amount\":10000\n    }\n\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/2fa/challenge",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "2fa",
+                    "challenge"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 01 Aug 2026 12:06:56 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "10"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "6"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Elevated action token issued\",\n    \"data\": {\n        \"elevated_action_token\": \"eyJqdGkiOiJjYjM4YWVhMC01Y2VmLTQwMjQtOWUzMi1jOGIzM2ExYzJlNTYiLCJzdWIiOiIwMTlmYmE3ZC01YzFjLTcxYTYtOTMzMi0wZjgzNmY1NzI3NTAiLCJhY3Rpb24iOiJzd2FwIiwiYWN0aW9uX2hhc2giOiI1NTYzNzdlMTQ5NmMzMTZiNDA1ZmUzZTkwNDY1ZmM1ZjVkYTFjYzYwM2VkYjJlN2MwZmEwMmY4ZDAyYmY0OTljIiwiaWF0IjoxNzg1NTg2MDE2LCJleHAiOjE3ODU1ODYwNzZ9.9xiHZoXclrK67f6JlYrcgxV7z6-2JVb_yinGoZhGBAQ\",\n        \"expires_in\": 60\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get current TOTP code(Dev)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/dev/totp/current",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "dev",
+                "totp",
+                "current"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/dev/totp/current",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "dev",
+                    "totp",
+                    "current"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 01 Aug 2026 12:05:37 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "30"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "29"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Dev-only current TOTP code\",\n    \"data\": {\n        \"totp\": \"039519\",\n        \"expires_in_hint_seconds\": 30,\n        \"warning\": \"Local/testing only. Do not enable in production.\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Swap",
+      "item": [
+        {
+          "name": "Swap currency",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Elevated-Action-Token",
+                "value": "{{elevated_action_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"source_wallet_id\": \"{{source_wallet_id}}\",\n\t\"destination_wallet_id\": \"{{destination_wallet_id}}\",\n\t\"amount\": {{swap_amount}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/swap",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "swap"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Elevated-Action-Token",
+                    "value": "{{elevated_action_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"source_wallet_id\": \"019fbd24-c57c-72e7-a9e1-572697fbc9ff\",\n\t\"destination_wallet_id\": \"019fbd24-c581-7135-ba1a-39de701dd781\",\n\t\"amount\": 20000000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/swap",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "swap"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 01 Aug 2026 12:37:01 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "30"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "27"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Swap completed\",\n    \"data\": {\n        \"transaction_id\": \"7aac8016-65d9-48c4-a336-a91490273ab6\",\n        \"source_amount\": 20000000,\n        \"fee_amount\": 0,\n        \"destination_amount\": 170000,\n        \"rate\": \"0.0085\",\n        \"source_currency\": \"NGN\",\n        \"destination_currency\": \"CNY\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Wallets",
+      "item": [
+        {
+          "name": "Get user wallets",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wallets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "wallets"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/wallets",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "wallets"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 01 Aug 2026 11:50:24 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "60"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "59"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Wallets retrieved\",\n    \"data\": [\n        {\n            \"id\": \"019fbd24-c581-7135-ba1a-39de701dd781\",\n            \"slug\": \"user:019fba7d-5c1c-71a6-9332-0f836f572750:CNY\",\n            \"type\": \"user\",\n            \"currency\": \"CNY\",\n            \"currency_id\": \"019fb9f8-5d76-7367-8cfe-1047269a7340\",\n            \"balance_subunits\": 0\n        },\n        {\n            \"id\": \"019fbd24-c57c-72e7-a9e1-572697fbc9ff\",\n            \"slug\": \"user:019fba7d-5c1c-71a6-9332-0f836f572750:NGN\",\n            \"type\": \"user\",\n            \"currency\": \"NGN\",\n            \"currency_id\": \"019fb9f8-5d70-71d3-8170-e97f0453e445\",\n            \"balance_subunits\": 100000000\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get wallet ledgers",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/api/ledger/{{wallet_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "ledger",
+                "{{wallet_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/ledger/{{wallet_id}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "ledger",
+                    "{{wallet_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 01 Aug 2026 12:58:02 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "60"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "59"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Ledger entries retrieved\",\n    \"data\": [\n        {\n            \"id\": \"bd4b59b8-79ed-4e96-ab56-1fb326611bef\",\n            \"transaction_id\": \"7aac8016-65d9-48c4-a336-a91490273ab6\",\n            \"wallet_id\": \"019fbd24-c57c-72e7-a9e1-572697fbc9ff\",\n            \"currency\": \"NGN\",\n            \"currency_id\": \"019fb9f8-5d70-71d3-8170-e97f0453e445\",\n            \"amount\": -20000000,\n            \"entry_type\": \"swap_debit\",\n            \"description\": \"Swap debit NGN\",\n            \"reference_type\": null,\n            \"reference_id\": null,\n            \"created_at\": \"2026-08-01T12:37:01+00:00\"\n        },\n        {\n            \"id\": \"dd47c52b-b049-483e-8c8f-6b197b7b585d\",\n            \"transaction_id\": \"7a253a7c-aa82-4bab-b662-b536459170b4\",\n            \"wallet_id\": \"019fbd24-c57c-72e7-a9e1-572697fbc9ff\",\n            \"currency\": \"NGN\",\n            \"currency_id\": \"019fb9f8-5d70-71d3-8170-e97f0453e445\",\n            \"amount\": -10000,\n            \"entry_type\": \"swap_debit\",\n            \"description\": \"Swap debit NGN\",\n            \"reference_type\": null,\n            \"reference_id\": null,\n            \"created_at\": \"2026-08-01T12:31:46+00:00\"\n        },\n        {\n            \"id\": \"900b8711-488a-4253-a635-af6ff3fe6aca\",\n            \"transaction_id\": \"ce4aab65-1681-45cb-b358-161e70059b06\",\n            \"wallet_id\": \"019fbd24-c57c-72e7-a9e1-572697fbc9ff\",\n            \"currency\": \"NGN\",\n            \"currency_id\": \"019fb9f8-5d70-71d3-8170-e97f0453e445\",\n            \"amount\": 100000000,\n            \"entry_type\": \"seed_credit\",\n            \"description\": \"Opening balance\",\n            \"reference_type\": null,\n            \"reference_id\": null,\n            \"created_at\": \"2026-08-01T11:45:31+00:00\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"per_page\": 20,\n        \"total\": 3,\n        \"last_page\": 1\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Settlement",
+      "item": [
+        {
+          "name": "Get X-Signature header(Dev)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"provider_reference\": \"{{provider_reference}}\",\n\t\"status\": \"completed\",\n\t\"wallet_id\": \"{{wallet_id}}\",\n\t\"amount\": {{settlement_amount}},\n\t\"currency_code\": \"{{currency_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/dev/webhooks/sign",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "dev",
+                "webhooks",
+                "sign"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Signature",
+                    "value": "{{x-signature}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"provider_reference\": \"set_001\",\n    \"status\": \"completed\",\n    \"wallet_id\": \"YOUR_NGN_WALLET_UUID\",\n    \"amount\": 50000,\n    \"currency_code\": \"NGN\"\n}\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/dev/webhooks/sign",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "dev",
+                    "webhooks",
+                    "sign"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 01 Aug 2026 14:04:42 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "60"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "59"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Dev-only webhook signature\",\n    \"data\": {\n        \"signature\": \"a7de9bcb9cc93e5a4baf5d63b01f5ebedb56bbf87d54e44106464ecbb391dce4\",\n        \"header\": {\n            \"X-Signature\": \"a7de9bcb9cc93e5a4baf5d63b01f5ebedb56bbf87d54e44106464ecbb391dce4\"\n        },\n        \"body\": {\n            \"provider_reference\": \"set_001\",\n            \"status\": \"completed\",\n            \"wallet_id\": \"YOUR_NGN_WALLET_UUID\",\n            \"amount\": 50000,\n            \"currency_code\": \"NGN\"\n        },\n        \"warning\": \"Local/testing only. POST this exact body to /api/webhooks/settlement.\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Settlement webhook",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Signature",
+                "value": "{{x-signature}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"provider_reference\": \"{{provider_reference}}\",\n\t\"status\": \"completed\",\n\t\"wallet_id\": \"{{wallet_id}}\",\n\t\"amount\": {{settlement_amount}},\n\t\"currency_code\": \"{{currency_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/webhooks/settlement",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "webhooks",
+                "settlement"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "successMessage",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-Signature",
+                    "value": "{{x-signature}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n\t\"provider_reference\": \"set_001\",\n\t\"status\": \"completed\",\n\t\"wallet_id\": \"{{wallet_id}}\",\n\t\"amount\": 50000,\n\t\"currency_code\": \"NGN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/webhooks/settlement",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "webhooks",
+                    "settlement"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Host",
+                  "value": "127.0.0.1:8000"
+                },
+                {
+                  "key": "Connection",
+                  "value": "close"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "PHP/8.4.23"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 01 Aug 2026 14:12:43 GMT"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json",
+                  "description": "",
+                  "type": "text"
+                },
+                {
+                  "key": "X-RateLimit-Limit",
+                  "value": "120"
+                },
+                {
+                  "key": "X-RateLimit-Remaining",
+                  "value": "117"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"message\": \"Webhook processed\",\n    \"data\": {\n        \"accepted\": true,\n        \"duplicate\": false,\n        \"webhook_event_id\": \"019fbdab-88c4-7086-bd43-688994f8b645\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "email",
+      "value": "test@tupay.test"
+    },
+    {
+      "key": "password",
+      "value": "password"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "totp",
+      "value": ""
+    },
+    {
+      "key": "elevated_action_token",
+      "value": ""
+    },
+    {
+      "key": "source_wallet_id",
+      "value": ""
+    },
+    {
+      "key": "destination_wallet_id",
+      "value": ""
+    },
+    {
+      "key": "wallet_id",
+      "value": ""
+    },
+    {
+      "key": "swap_amount",
+      "value": "10000"
+    },
+    {
+      "key": "x-signature",
+      "value": ""
+    },
+    {
+      "key": "provider_reference",
+      "value": "set_001"
+    },
+    {
+      "key": "settlement_amount",
+      "value": "50000"
+    },
+    {
+      "key": "currency_code",
+      "value": "NGN"
+    }
+  ]
+}
