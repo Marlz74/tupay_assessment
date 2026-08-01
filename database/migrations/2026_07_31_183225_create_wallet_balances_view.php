@@ -10,7 +10,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('
+        $balanceExpr = DB::getDriverName() === 'pgsql'
+            ? 'COALESCE(SUM(le.amount), 0)::bigint'
+            : 'CAST(COALESCE(SUM(le.amount), 0) AS INTEGER)';
+
+        DB::statement("
             CREATE VIEW wallet_balances AS
             SELECT
                 w.id AS wallet_id,
@@ -18,11 +22,11 @@ return new class extends Migration
                 w.currency_id,
                 w.type,
                 w.slug,
-                COALESCE(SUM(le.amount), 0)::bigint AS balance_subunits
+                {$balanceExpr} AS balance_subunits
             FROM wallets w
             LEFT JOIN ledger_entries le ON le.wallet_id = w.id
             GROUP BY w.id, w.user_id, w.currency_id, w.type, w.slug
-        ');
+        ");
     }
 
     /**

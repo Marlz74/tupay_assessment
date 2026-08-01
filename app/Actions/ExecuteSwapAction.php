@@ -144,7 +144,9 @@ final class ExecuteSwapAction
                 $baseCurrency,
                 $quoteCurrency,
             ): string {
-                DB::statement('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+                if (DB::getDriverName() === 'pgsql') {
+                    DB::statement('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+                }
 
                 $walletIds = [
                     $sourceWallet->id,

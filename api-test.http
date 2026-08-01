@@ -1,6 +1,13 @@
 ### Tupay Ledger & Settlement — manual API walkthrough
-### Requires: `php artisan serve`, migrated + seeded DB, Redis, WEBHOOK_SECRET set.
-### REST Client: run Login → TOTP → Wallets → set wallet vars → Challenge → Swap → Sign → Settlement.
+###
+### How to run (Cursor / VS Code):
+### 1. Install the "REST Client" extension (humao.rest-client) if needed.
+### 2. Start the app: `php artisan serve` (migrated + seeded DB, Redis up, WEBHOOK_SECRET set).
+### 3. Open this file — click "Send Request" above each block, top to bottom.
+### 4. After Wallets, paste NGN/CNY UUIDs into @sourceWalletId / @destinationWalletId / @walletId.
+###
+### Requires: Redis, WEBHOOK_SECRET. Dev TOTP + webhook sign only work in local/testing.
+### Flow: Login → TOTP → Wallets → set wallet vars → Challenge → Swap → Sign → Settlement.
 
 @baseUrl = http://127.0.0.1:8000
 @token =

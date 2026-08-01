@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -28,13 +29,15 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->index(['wallet_id', 'created_at', 'id']);
             $table->index(['reference_type', 'reference_id']);
-
         });
-        DB::statement('
-            ALTER TABLE ledger_entries
-            ADD CONSTRAINT ledger_entries_amount_nonzero_check
-            CHECK (amount <> 0)
-        ');
+
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('
+                ALTER TABLE ledger_entries
+                ADD CONSTRAINT ledger_entries_amount_nonzero_check
+                CHECK (amount <> 0)
+            ');
+        }
     }
 
     /**

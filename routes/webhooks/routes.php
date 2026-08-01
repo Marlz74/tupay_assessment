@@ -1,3 +1,3 @@
 <?php
 
-require_once __DIR__.'/settlement.php';
+require __DIR__.'/settlement.php';

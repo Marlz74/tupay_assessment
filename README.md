@@ -8,7 +8,7 @@ Backend assessment: double-entry ledger, step-up 2FA (EAT), FX swap with Redis l
 - Composer
 - PostgreSQL 16+
 - Redis 7+
-- Extensions: `pdo_pgsql`, `bcmath`, `mbstring` (Predis is used by default — no `ext-redis` required)
+- Extensions: `pdo_pgsql`, `bcmath`, `mbstring` (Predis is used by default  no `ext-redis` required)
 
 ## Setup
 
@@ -32,7 +32,7 @@ Configure `.env` (see also `.env.example`):
 
 ```bash
 createdb tupay            # once
-createdb tupay_testing    # once — concurrency suite
+createdb tupay_testing    # once  concurrency suite
 
 php artisan migrate --seed
 php artisan serve
@@ -49,23 +49,23 @@ Seeded demo user:
 
 Local helpers (disabled outside `local` / `testing`):
 
-- `GET /api/dev/totp/current` — current TOTP
-- `POST /api/dev/webhooks/sign` — HMAC for a webhook body
+- `GET /api/dev/totp/current`  current TOTP
+- `POST /api/dev/webhooks/sign`  HMAC for a webhook body
 
 ## API walkthrough
 
-1. **Postman** — import [`docs/postman/Tupay Assessment.postman_collection.json`](docs/postman/Tupay%20Assessment.postman_collection.json). Collection variables include `base_url` (`http://127.0.0.1:8000`), credentials, wallets, `token`, `totp`, `elevated_action_token`, and `x-signature`. Fill wallet IDs from **Get user wallets**, TOTP from the dev endpoint, then challenge → swap → sign → settlement (reuse the **exact** JSON body for sign + settle).
-2. **HTTP file** — open [`api-test.http`](api-test.http) in the IDE REST Client and run requests top to bottom.
+1. **Postman**  import [`docs/postman/Tupay Assessment.postman_collection.json`](docs/postman/Tupay%20Assessment.postman_collection.json). Collection variables include `base_url` (`http://127.0.0.1:8000`), credentials, wallets, `token`, `totp`, `elevated_action_token`, and `x-signature`. Fill wallet IDs from **Get user wallets**, TOTP from the dev endpoint, then challenge → swap → sign → settlement (reuse the **exact** JSON body for sign + settle).
+2. **HTTP file**  open [`api-test.http`](api-test.http) in VS Code with the **REST Client** extension (`humao.rest-client`). With `php artisan serve` running, click **Send Request** above each block (top to bottom). After **Wallets**, paste NGN/CNY ids into the `@sourceWalletId` / `@destinationWalletId` / `@walletId` variables.
 
 Suggested order: Login → TOTP → Wallets → 2FA challenge → Swap → Ledger → Sign webhook → Settlement.
 
 ## Architecture (short)
 
-- **Money** — integer subunits (`BIGINT`); BCMath + banker’s rounding in `App\Support\MoneyMath`
-- **Ledger** — append-only `ledger_entries`; balances via `wallet_balances` view; deferred non-negative trigger on user/treasury wallets
-- **EAT** — TOTP challenge issues a 60s HMAC token bound to action + payload hash; Redis `GETDEL` enforces single use (failures → **401**)
-- **Swap** — ordered Redis locks, slippage rules, double-entry legs including fee to treasury when applicable
-- **Settlement** — verify `X-Signature`, persist idempotent `webhook_events`, queue job, status state machine
+- **Money**  integer subunits (`BIGINT`); BCMath + banker’s rounding in `App\Support\MoneyMath`
+- **Ledger**  append-only `ledger_entries`; balances via `wallet_balances` view; deferred non-negative trigger on user/treasury wallets
+- **EAT**  TOTP challenge issues a 60s HMAC token bound to action + payload hash; Redis `GETDEL` enforces single use (failures → **401**)
+- **Swap**  ordered Redis locks, slippage rules, double-entry legs including fee to treasury when applicable
+- **Settlement**  verify `X-Signature`, persist idempotent `webhook_events`, queue job, status state machine
 
 ## Quality gates
 

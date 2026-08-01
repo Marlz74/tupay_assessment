@@ -10,6 +10,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
         DB::statement("
             CREATE OR REPLACE FUNCTION prevent_negative_wallet_balance()
             RETURNS TRIGGER
@@ -51,6 +55,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
         DB::statement('DROP TRIGGER IF EXISTS trg_prevent_negative_wallet_balance ON ledger_entries');
         DB::statement('DROP FUNCTION IF EXISTS prevent_negative_wallet_balance()');
     }
